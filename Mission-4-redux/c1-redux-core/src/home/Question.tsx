@@ -1,5 +1,8 @@
+import { useAppSelector } from "@/redux/hook";
+
 export default function Question() {
-  return (
-    <div>Question</div>
-  )
+  const { value } = useAppSelector((state) => state.quiz);
+  console.log(value);
+  
+  return <div>Question</div>;
 }
