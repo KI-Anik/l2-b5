@@ -1,6 +1,6 @@
 import type { RootState } from "@/redux/store";
 import type { ITask } from "@/types";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from 'uuid';
 
 interface InitialState {
@@ -10,14 +10,14 @@ interface InitialState {
 
 const initialState: InitialState = {
     tasks: [
-        // {
-        //     id: 'one',
-        //     title: 'anik',
-        //     description: 'i am learning redux',
-        //     dueDate: '2020-06-27',
-        //     isCompleted: false,
-        //     priority: 'high'
-        // },
+        {
+            id: 'one',
+            title: 'anik',
+            description: 'i am learning redux',
+            dueDate: '2020-06-27',
+            isCompleted: false,
+            priority: 'high'
+        },
 
         // {
         //     id: 'two',
@@ -38,20 +38,50 @@ const initialState: InitialState = {
     ],
     filter: 'all'
 }
+
+type DraftTask = Pick<ITask, "description" | "dueDate" | "priority" | "title">;
+
+const createTask = (taskData: DraftTask): ITask => {
+    return {
+        id: nanoid(),
+        isCompleted: false,
+        ...taskData
+    }
+}
+
+
 const taskSlice = createSlice({
     name: 'task',
     initialState,
     reducers: {
-        addTask: (state, action: PayloadAction<ITask>) => {
+        addTask: (state, action: PayloadAction<DraftTask>) => {
+            // 1st comment
             // state.tasks.push(action.payload)
 
-            const id = uuidv4()
-            const taskData = {
-                ...action.payload,
-                id
-            };
+            // 2nd comment
+            // const id = uuidv4()
+            // const taskData = {
+            //     ...action.payload,
+            //     id,
+            // isCompleted : false
+            // };
 
+            // 3rd version
+            const taskData = createTask(action.payload)
             state.tasks.push(taskData);
+            console.log("action", action);
+        },
+        toogleCompleteState: (state, action: PayloadAction<string>) => {
+            state.tasks.forEach(task =>
+                task.id === action.payload ?
+                    task.isCompleted = !task.isCompleted
+                    : task
+            );
+        },
+        deleteTask: (state, action: PayloadAction<string>) => {
+            state.tasks = state.tasks.filter(task =>
+                task.id !== action.payload
+            );
         }
     }
 });
@@ -64,6 +94,6 @@ export const selectFilter = (state: RootState) => {
     return state.todo.filter
 }
 
-export const { addTask } = taskSlice.actions
+export const { addTask, toogleCompleteState, deleteTask } = taskSlice.actions
 
 export default taskSlice.reducer
