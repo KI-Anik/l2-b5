@@ -35,12 +35,16 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useDispatch } from "react-redux";
+import { addTask } from "@/redux/features/task/taskSlice";
 
 export function AddTaskModal() {
   const form = useForm();
+  const dispatch = useDispatch()
 
   const onSubmit = (data) => {
     console.log(data);
+    dispatch(addTask(data))
   };
 
   return (
@@ -90,13 +94,13 @@ export function AddTaskModal() {
             {/*  pick a option start */}
              <FormField
           control={form.control}
-          name="Priority"
+          name="priority"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Priority</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a value" />
                   </SelectTrigger>
                 </FormControl>
