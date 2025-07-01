@@ -39,7 +39,7 @@ const initialState: InitialState = {
     filter: 'all'
 }
 
-type DraftTask = Pick<ITask, "description" | "dueDate" | "priority" | "title">;
+type DraftTask = Pick<ITask, "description" | "dueDate" | "priority" | "title" | "assignedTo">;
 
 const createTask = (taskData: DraftTask): ITask => {
     return {

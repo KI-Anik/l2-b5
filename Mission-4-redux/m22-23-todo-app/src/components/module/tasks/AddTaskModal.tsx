@@ -38,8 +38,11 @@ import { cn } from "@/lib/utils";
 import { useDispatch } from "react-redux";
 import { addTask } from "@/redux/features/task/taskSlice";
 import type { ITask } from "@/types";
+import { useAppSelector } from "@/redux/hook";
+import { selectUser } from "@/redux/features/user/userSlice";
 
 export function AddTaskModal() {
+  const users = useAppSelector(selectUser)
   const form = useForm();
   const dispatch = useDispatch();
 
@@ -122,6 +125,36 @@ export function AddTaskModal() {
               )}
             />
             {/* pick a option end */}
+
+            {/* add user start */}
+             <FormField
+              control={form.control}
+              name="assignedTo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Assign to</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a value" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {
+                        users.map(user => 
+                      <SelectItem value={user.id}>{user.name}</SelectItem>
+
+                        )
+                      }
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            {/* add user end */}
 
             {/* calendar start */}
             <FormField
