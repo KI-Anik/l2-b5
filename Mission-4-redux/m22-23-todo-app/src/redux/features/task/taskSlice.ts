@@ -16,7 +16,8 @@ const initialState: InitialState = {
             description: 'i am learning redux',
             dueDate: '2020-06-27',
             isCompleted: false,
-            priority: 'high'
+            priority: 'high',
+            assignedTo: null
         },
 
         // {
@@ -43,9 +44,10 @@ type DraftTask = Pick<ITask, "description" | "dueDate" | "priority" | "title" | 
 
 const createTask = (taskData: DraftTask): ITask => {
     return {
+        ...taskData,
         id: nanoid(),
         isCompleted: false,
-        ...taskData
+        assignedTo: taskData.assignedTo ? taskData.assignedTo : null
     }
 }
 
@@ -82,7 +84,7 @@ const taskSlice = createSlice({
                 task.id !== action.payload
             );
         },
-        updateFilter: (state, action ) => {
+        updateFilter: (state, action) => {
             state.filter = action.payload
         }
     }
@@ -101,7 +103,7 @@ export const selectTask = (state: RootState) => {
     }
 }
 
-export const selectFilter = (state: RootState ) => {
+export const selectFilter = (state: RootState) => {
     return state.todo.filter
 }
 
