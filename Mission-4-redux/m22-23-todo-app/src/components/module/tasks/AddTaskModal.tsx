@@ -44,8 +44,12 @@ export function AddTaskModal() {
   const dispatch = useDispatch();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
-    dispatch(addTask(data as ITask));
+    const serializableTaskData = {
+      ...data,
+      dueDate : data.dueDate.toISOString() // Convert dueDate to ISO string
+    }
+   
+    dispatch(addTask(serializableTaskData as ITask));
   };
 
   return (
@@ -166,7 +170,7 @@ export function AddTaskModal() {
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-                <Button type="submit">Save changes</Button>
+              <Button type="submit">Save changes</Button>
             </DialogFooter>
           </form>
         </Form>
